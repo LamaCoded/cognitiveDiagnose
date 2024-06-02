@@ -19,22 +19,14 @@ class MyApp extends StatelessWidget {
             labelLarge: TextStyle(
               fontFamily: 'Manrope',
               fontSize: 18,
-              height: 27,
               fontWeight: FontWeight.w700,
               color: Color(0x1A1C1E).withOpacity(1),
             ),
             labelMedium: TextStyle(
               fontFamily: 'Manrope',
               fontSize: 16,
-              height: 20.8,
               fontWeight: FontWeight.w700,
               color: Color(0x1A1C1E).withOpacity(1),
-            ),
-            bodyMedium: TextStyle(
-              fontFamily: 'Manrope',
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              color: Color(0x6C7278).withOpacity(1),
             ),
             bodySmall: TextStyle(
               fontFamily: 'Manrope',
