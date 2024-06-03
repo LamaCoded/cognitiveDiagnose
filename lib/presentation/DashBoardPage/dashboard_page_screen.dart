@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:measureap/presentation/AssessmentPage/assessment.dart';
 import 'package:measureap/presentation/HomePage/home_page_screen.dart';
-import 'package:measureap/presentation/HomePage/newHome.dart';
+import 'package:measureap/presentation/HomePage/home_page_screen.dart';
 import 'package:measureap/presentation/NewAssessment/new_assessment_screen.dart';
 
 class DashBoardScreen extends StatefulWidget {
   DashBoardScreen({super.key});
   List screens = [
-    HomePageScreen(),
+    HomeScreen(),
     NewAssessmentPage(),
     HomeScreen(),
     AssessmentScreen()

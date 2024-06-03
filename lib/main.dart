@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:measureap/presentation/AssessmentPage/assessment.dart';
 import 'package:measureap/presentation/DashBoardPage/dashboard_page_screen.dart';
+import 'package:measureap/presentation/HomePage/home_page_screen.dart';
+import 'package:measureap/presentation/NewAssessment/new_assessment_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,7 +41,13 @@ class MyApp extends StatelessWidget {
             ColorScheme.fromSeed(seedColor: Color(0x1A1C1E).withOpacity(1)),
         useMaterial3: true,
       ),
-      home: DashBoardScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => DashBoardScreen(),
+        '/Home': (context) => HomeScreen(),
+        '/newAssessment': (context) => NewAssessmentPage(),
+        '/startAssessment': (context) => AssessmentScreen()
+      },
     );
   }
 }

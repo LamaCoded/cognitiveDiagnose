@@ -1,15 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:measureap/presentation/AssessmentPage/assessment_identify_animal.dart';
+import 'package:measureap/presentation/AssessmentPage/assessment_main.dart';
+import 'package:measureap/presentation/AssessmentPage/assessment_result.dart';
+import 'package:measureap/presentation/AssessmentPage/assessment_sentence.dart';
+import 'package:measureap/presentation/AssessmentPage/assessment_story.dart';
 
-class AssessmentScreen extends StatelessWidget {
+class AssessmentScreen extends StatefulWidget {
+  @override
+  State<AssessmentScreen> createState() => _AssessmentScreenState();
+}
+
+class _AssessmentScreenState extends State<AssessmentScreen> {
+  int pageValue = 0;
+  final PageController _pageController = PageController(initialPage: 0);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        title: Text('Assessment'),
+        title: Text(
+          'Assessment',
+          style: Theme.of(context)
+              .textTheme
+              .labelMedium!
+              .copyWith(fontWeight: FontWeight.w800),
+        ),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: Icon(Icons.more_vert),
@@ -19,87 +41,42 @@ class AssessmentScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(5, (index) {
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4.0),
-                  width: 40.0,
-                  height: 4.0,
-                  color: index == 0 ? Colors.black : Colors.grey[300],
-                );
-              }),
-            ),
-            SizedBox(height: 32.0),
-            Text(
-              'How many fingers do you see?',
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(5, (index) {
+                  return Container(
+                    margin: EdgeInsets.symmetric(horizontal: 4.0),
+                    width: 40.0,
+                    height: 4.0,
+                    color: index == pageValue ? Colors.black : Colors.grey[300],
+                  );
+                }),
               ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 8.0),
-            Text(
-              'Please show the patient a certain amount of fingers and follow their reaction.',
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Colors.grey,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 32.0),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                padding: EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.orange),
-                  borderRadius: BorderRadius.circular(8.0),
+              SizedBox(height: 32.0),
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  pageSnapping: true,
+                  onPageChanged: (index) {
+                    setState(() {
+                      pageValue = index;
+                    });
+                  },
+                  children: [
+                    AssessmentMain(),
+                    AssessmentStory(),
+                    AssessmentSentence(),
+                    AssessmentIdentifyAnimal(),
+                    AssessmentResults()
+                  ],
                 ),
-                child: Center(
-                  child: Text(
-                    'Correct',
-                    style: TextStyle(fontSize: 18.0),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                padding: EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Center(
-                  child: Text(
-                    'Incorrect',
-                    style: TextStyle(fontSize: 18.0),
-                  ),
-                ),
-              ),
-            ),
-            Spacer(),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              child: Text(
-                'Continue',
-                style: TextStyle(fontSize: 18.0),
-              ),
-            ),
-            SizedBox(height: 16.0),
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
