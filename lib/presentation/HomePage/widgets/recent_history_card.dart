@@ -1,67 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:measureap/data/connection.dart';
 
-Widget RecentHistoryCard(BuildContext context) {
-  return SizedBox(
-    width: MediaQuery.of(context).size.width,
-    height: 130,
+Widget buildHistoryCard(BuildContext context, String code, String title,
+    String gender, String age, String weight, String date, String name) {
+  return GestureDetector(
+    onTap: () => FetchData().getRecentHistory(),
     child: Card(
-      elevation: 2,
       color: Colors.white,
+      margin: EdgeInsets.symmetric(vertical: 8.0),
       child: Padding(
-        padding: const EdgeInsets.all(16.0), // Add padding here
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Color(0x4D6FE7).withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-                  child: RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Z00.00  ',
-                          style:
-                              Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                        TextSpan(
-                          text: 'Physical Examinations',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Icon(Icons.next_plan_rounded),
+                Text('$code - $title',
+                    style: TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Manrope')),
               ],
             ),
-            SizedBox(height: 14),
+            SizedBox(height: 8.0),
             Text(
-              'Davis Culhane',
-              style: Theme.of(context).textTheme.bodyMedium,
+              name,
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(fontWeight: FontWeight.w600),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Male',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                Text(
-                  '41 7ear 84 kg',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                Text(
-                  '01.03.2920',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
+                Text('$gender - $age - $weight',
+                    style: TextStyle(fontSize: 14.0, color: Colors.grey)),
+                Text(date,
+                    style: TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.grey,
+                        fontFamily: 'Manrope')),
               ],
             ),
           ],

@@ -1,42 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:measureap/data/connection.dart';
+import 'package:measureap/presentation/HomePage/model/recent_assessment_model.dart';
 
-Widget RecentAssessmentCard(BuildContext context) {
-  return SizedBox(
-    width: MediaQuery.of(context).size.width,
-    height: 56,
+Widget buildAssessmentCard(BuildContext context, RecentAssessmentModel model) {
+  return GestureDetector(
+    onTap: () => FetchData().getRecentAssessment(),
     child: Card(
-      elevation: 2,
+      color: Colors.white,
+      margin: EdgeInsets.symmetric(vertical: 8.0),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.all(16.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Color(0x4D6FE7).withOpacity(0.12),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                        text: 'Z00.00  ',
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xE7974D1F).withOpacity(0.12))),
-                    TextSpan(
-                      text: 'Physical Examinations',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: Color(0xE7974D1F).withOpacity(0.12)),
-                    ),
-                  ],
-                ),
-              ),
+            RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                    text: '${model.code} . ',
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                        fontWeight: FontWeight.bold, color: Colors.orange)),
+                TextSpan(
+                    text: model.title,
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                        color: Colors.orange, fontWeight: FontWeight.normal))
+              ]),
             ),
-            Icon(Icons.next_plan_rounded),
+            Icon(Icons.arrow_forward, color: Colors.orange),
           ],
         ),
       ),

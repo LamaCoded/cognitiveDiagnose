@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "921705614729",
+    "project_id": "measureap-abbe6",
+    "storage_bucket": "measureap-abbe6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921705614729:android:1d3535490c92c33ff7a558",
+        "android_client_info": {
+          "package_name": "com.example.measureap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB0mkYxFDDExNVOPP-Pm2f2R4bFAS-SUA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

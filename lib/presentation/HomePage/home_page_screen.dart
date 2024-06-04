@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:measureap/presentation/HomePage/bloc/home_bloc.dart';
+import 'package:measureap/presentation/HomePage/model/recent_assessment_model.dart';
+import 'package:measureap/presentation/HomePage/widgets/recent_assessment_card.dart';
+import 'package:measureap/presentation/HomePage/widgets/recent_history_card.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -111,59 +116,13 @@ class HomeScreen extends StatelessWidget {
                 )),
           ],
         ),
-        _buildHistoryCard(context, 'Z00.0', 'Physical Examination', 'Male',
+        buildHistoryCard(context, 'Z00.0', 'Physical Examination', 'Male',
             '36 Years old', '84 kg', '02.03.2024', 'Davis Culgane'),
-        _buildHistoryCard(context, 'Z01.89', 'Diagnostic Tests', 'Male',
+        buildHistoryCard(context, 'Z01.89', 'Diagnostic Tests', 'Male',
             '41 Years old', '84 kg', '01.03.2024', 'Davis Culgane'),
-        _buildHistoryCard(context, 'Z01.89', 'Diagnostic Tests', 'Male',
+        buildHistoryCard(context, 'Z01.89', 'Diagnostic Tests', 'Male',
             '41 Years old', '84 kg', '01.03.2024', 'Davis Culgane'),
       ],
-    );
-  }
-
-  Widget _buildHistoryCard(BuildContext context, String code, String title,
-      String gender, String age, String weight, String date, String name) {
-    return Card(
-      color: Colors.white,
-      margin: EdgeInsets.symmetric(vertical: 8.0),
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('$code - $title',
-                    style: TextStyle(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Manrope')),
-              ],
-            ),
-            SizedBox(height: 8.0),
-            Text(
-              name,
-              style: Theme.of(context)
-                  .textTheme
-                  .labelMedium!
-                  .copyWith(fontWeight: FontWeight.w600),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('$gender - $age - $weight',
-                    style: TextStyle(fontSize: 14.0, color: Colors.grey)),
-                Text(date,
-                    style: TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.grey,
-                        fontFamily: 'Manrope')),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -186,38 +145,29 @@ class HomeScreen extends StatelessWidget {
             )
           ],
         ),
-        _buildAssessmentCard(context, 'COGNITION', 'SLUMS'),
-        _buildAssessmentCard(context, 'Z00.0', 'Physical Examination'),
-        _buildAssessmentCard(context, 'Z01.89', 'Diagnostic Tests'),
-      ],
-    );
-  }
-
-  Widget _buildAssessmentCard(BuildContext context, String code, String title) {
-    return Card(
-      color: Colors.white,
-      margin: EdgeInsets.symmetric(vertical: 8.0),
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                    text: '${code} . ',
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                        fontWeight: FontWeight.bold, color: Colors.orange)),
-                TextSpan(
-                    text: title,
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                        color: Colors.orange, fontWeight: FontWeight.normal))
-              ]),
-            ),
-            Icon(Icons.arrow_forward, color: Colors.orange),
-          ],
+        BlocBuilder<HomeBloc, HomeState>(
+          builder: (context, state) {
+            print('the length is ${state.recentHistoryModelList}');
+            if (state.isLoading == true) {
+              return CircularProgressIndicator();
+            }
+            return Container(
+              height: 500,
+              child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemCount: state.recentHistoryModelList.length,
+                  itemBuilder: (context, item) {
+                    return buildAssessmentCard(context,
+                        RecentAssessmentModel('Z00.0', 'Physical Examination'));
+                  }),
+            );
+          },
         ),
-      ),
+        // buildAssessmentCard(context, 'COGNITION', 'SLUMS'),
+        // buildAssessmentCard(context, 'Z00.0', 'Physical Examination'),
+        // buildAssessmentCard(context, 'Z01.89', 'Diagnostic Tests'),
+      ],
     );
   }
 }
