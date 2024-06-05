@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:measureap/presentation/HomePage/bloc/home_bloc.dart';
-import 'package:measureap/presentation/HomePage/model/recent_assessment_model.dart';
+
 import 'package:measureap/presentation/HomePage/widgets/recent_assessment_card.dart';
 import 'package:measureap/presentation/HomePage/widgets/recent_history_card.dart';
 
@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              CircleAvatar(
+              const CircleAvatar(
                 backgroundImage:
                     NetworkImage('https://prajwollama.com.np/prajwollama.jpg'),
                 radius: 25,
@@ -116,12 +116,26 @@ class HomeScreen extends StatelessWidget {
                 )),
           ],
         ),
-        buildHistoryCard(context, 'Z00.0', 'Physical Examination', 'Male',
-            '36 Years old', '84 kg', '02.03.2024', 'Davis Culgane'),
-        buildHistoryCard(context, 'Z01.89', 'Diagnostic Tests', 'Male',
-            '41 Years old', '84 kg', '01.03.2024', 'Davis Culgane'),
-        buildHistoryCard(context, 'Z01.89', 'Diagnostic Tests', 'Male',
-            '41 Years old', '84 kg', '01.03.2024', 'Davis Culgane'),
+        BlocBuilder<HomeBloc, HomeState>(
+          builder: (context, state) {
+            if (state.isHistoryLoading == true) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return Container(
+              height: 390,
+              child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemCount: state.recentHistoryModelList.length,
+                  itemBuilder: (context, item) {
+                    return buildHistoryCard(
+                        context, state.recentHistoryModelList[item]);
+                  }),
+            );
+          },
+        ),
       ],
     );
   }
@@ -147,26 +161,22 @@ class HomeScreen extends StatelessWidget {
         ),
         BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
-            print('the length is ${state.recentHistoryModelList}');
-            if (state.isLoading == true) {
-              return CircularProgressIndicator();
+            if (state.isAssesmentLoading == true) {
+              return Center(child: CircularProgressIndicator());
             }
             return Container(
-              height: 500,
+              height: 220,
               child: ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
-                  itemCount: state.recentHistoryModelList.length,
+                  itemCount: state.recentAssessmentModelList.length,
                   itemBuilder: (context, item) {
-                    return buildAssessmentCard(context,
-                        RecentAssessmentModel('Z00.0', 'Physical Examination'));
+                    return buildAssessmentCard(
+                        context, state.recentAssessmentModelList[item]);
                   }),
             );
           },
         ),
-        // buildAssessmentCard(context, 'COGNITION', 'SLUMS'),
-        // buildAssessmentCard(context, 'Z00.0', 'Physical Examination'),
-        // buildAssessmentCard(context, 'Z01.89', 'Diagnostic Tests'),
       ],
     );
   }

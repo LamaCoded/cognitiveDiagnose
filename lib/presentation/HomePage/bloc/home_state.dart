@@ -2,29 +2,40 @@ part of 'home_bloc.dart';
 
 @immutable
 class HomeState extends Equatable {
-  final List<RecentHistoryModel> recentHistoryModelList;
-  final List<RecentAssessmentModel> recentAssessmentModelList;
-  bool isLoading = true;
+  // List<Map<String, dynamic>> recentHistoryModelList;
+  // List<Map<String, dynamic>> recentAssessmentModelList;
+  List<RecentHistoryModel> recentHistoryModelList;
+  List<RecentAssessmentModel> recentAssessmentModelList;
+  bool isHistoryLoading = true;
+  bool isAssesmentLoading = true;
 
   HomeState(
       {this.recentHistoryModelList = const [],
       this.recentAssessmentModelList = const [],
-      this.isLoading = true});
+      this.isHistoryLoading = true,
+      this.isAssesmentLoading = true});
 
   @override
-  List<Object?> get props =>
-      [recentHistoryModelList, recentAssessmentModelList, isLoading];
+  List<Object?> get props => [
+        recentHistoryModelList,
+        recentAssessmentModelList,
+        isHistoryLoading,
+        isAssesmentLoading
+      ];
 
   HomeState copyWith({
     List<RecentHistoryModel>? recentHistoryModelList,
     List<RecentAssessmentModel>? recentAssessmentModelList,
-    bool? isLoading,
+    bool? isAssesmentLoading,
+    bool? isHistoryLoading,
   }) {
     return HomeState(
-        recentHistoryModelList:
-            recentHistoryModelList ?? this.recentHistoryModelList,
-        recentAssessmentModelList:
-            recentAssessmentModelList ?? this.recentAssessmentModelList,
-        isLoading: isLoading ?? this.isLoading);
+      recentHistoryModelList:
+          List.from(recentHistoryModelList ?? this.recentHistoryModelList),
+      recentAssessmentModelList: List.from(
+          recentAssessmentModelList ?? this.recentAssessmentModelList),
+      isHistoryLoading: isHistoryLoading ?? this.isHistoryLoading,
+      isAssesmentLoading: isAssesmentLoading ?? this.isAssesmentLoading,
+    );
   }
 }

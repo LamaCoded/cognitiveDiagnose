@@ -17,56 +17,35 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         as EventHandler<RecentAssessmentItemFetchEvent, HomeState>);
   }
 
-  void _onInitialize(
-    HomeInitialEvent event,
-    Emitter<HomeState> emit,
-  ) {
-    final historyStream = FetchData().getRecentHistory();
-    final assessStream = FetchData().getRecentAssessment();
+  void _onInitialize(HomeInitialEvent event, Emitter<HomeState> emit) async {
+    try {
+      final historyList = await FetchData().getRecentHistory();
+      final tempHistoryList = historyList
+          .map((map) => RecentHistoryModel(
+                map['name'] ?? 'good Lama',
+                map['age'] ?? '42 year',
+                map['date'] ?? '01/34/33',
+                map['weight'] ?? '85 kg',
+                map['gender'] ?? 'Male',
+                map['title'] ?? 'Diagnostic Test',
+                map['code'] ?? 'Z00',
+              ))
+          .toList();
+      emit(state.copyWith(
+          isHistoryLoading: false, recentHistoryModelList: tempHistoryList));
 
-    List<RecentHistoryModel> tempRecentHistoryList = [
-      RecentHistoryModel('prajwol', 'asd', 'as', "asd", 'asd', 'title', 'code')
-    ];
-    List<RecentAssessmentModel> tempRecentAssessmentList = [];
-
-    historyStream.listen(
-      (List<Map<String, dynamic>> recentHistoryList) {
-        tempRecentHistoryList = recentHistoryList.map((map) {
-          print(map['name']);
-          return RecentHistoryModel(
-            map['name'] ?? 'prajwol Lama',
-            map['age'] ?? '42 year',
-            map['date'] ?? '01/34/33',
-            map['weight'] ?? '85 kg',
-            map['gender'] ?? 'Male',
-            map['title'] ?? 'Diagnostic Test',
-            map['code'] ?? 'Z00',
-          );
-        }).toList();
-        print(tempRecentHistoryList);
-      },
-      onError: (error) {
-        print('Error fetching Recent History: $error');
-      },
-    );
-
-    assessStream.listen(
-      (List<Map<String, dynamic>> recentAssessmentList) {
-        tempRecentAssessmentList = recentAssessmentList.map((map) {
-          return RecentAssessmentModel(
-              map['code'] ?? 'Z00.89', map['title'] ?? 'Physical Test');
-        }).toList();
-        print(recentAssessmentList);
-      },
-      onError: (error) {
-        print('Error fetching Recent Assessments: $error');
-      },
-    );
-    emit(state.copyWith(
-      isLoading: false,
-      recentAssessmentModelList: tempRecentAssessmentList,
-      recentHistoryModelList: tempRecentHistoryList,
-    ));
+      final assessList = await FetchData().getRecentAssessment();
+      final tempAssessList = assessList
+          .map((map) => RecentAssessmentModel(
+              map['code'] ?? 'Z00.89', map['title'] ?? 'Physical Test'))
+          .toList();
+      emit(state.copyWith(
+          isAssesmentLoading: false,
+          recentAssessmentModelList: tempAssessList));
+    } catch (e) {
+      print('Error initializing: $e');
+      emit(state.copyWith(isHistoryLoading: false, isAssesmentLoading: false));
+    }
   }
 
   _onHistoryFetch(

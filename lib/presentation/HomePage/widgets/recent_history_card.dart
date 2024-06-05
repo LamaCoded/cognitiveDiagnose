@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:measureap/data/connection.dart';
+import 'package:measureap/presentation/HomePage/model/recent_history_model.dart';
 
-Widget buildHistoryCard(BuildContext context, String code, String title,
-    String gender, String age, String weight, String date, String name) {
+Widget buildHistoryCard(BuildContext context, RecentHistoryModel model) {
   return GestureDetector(
     onTap: () => FetchData().getRecentHistory(),
     child: Card(
@@ -16,7 +16,7 @@ Widget buildHistoryCard(BuildContext context, String code, String title,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('$code - $title',
+                Text('${model.code} - ${model.title}',
                     style: TextStyle(
                         fontSize: 14.0,
                         fontWeight: FontWeight.bold,
@@ -25,7 +25,7 @@ Widget buildHistoryCard(BuildContext context, String code, String title,
             ),
             SizedBox(height: 8.0),
             Text(
-              name,
+              model.name,
               style: Theme.of(context)
                   .textTheme
                   .labelMedium!
@@ -34,9 +34,9 @@ Widget buildHistoryCard(BuildContext context, String code, String title,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('$gender - $age - $weight',
+                Text('${model.gender} - ${model.age} - ${model.weight}',
                     style: TextStyle(fontSize: 14.0, color: Colors.grey)),
-                Text(date,
+                Text(model.date,
                     style: TextStyle(
                         fontSize: 14.0,
                         color: Colors.grey,
