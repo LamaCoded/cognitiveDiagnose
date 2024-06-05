@@ -12,3 +12,9 @@ class HomeInitialEvent extends HomeEvent {}
 class RecentHistoryItemFetchEvent extends HomeEvent {}
 
 class RecentAssessmentItemFetchEvent extends HomeEvent {}
+
+class onSelectCognitionEvent extends HomeEvent {
+  final Map<String, dynamic> payload;
+
+  onSelectCognitionEvent({required this.payload});
+}

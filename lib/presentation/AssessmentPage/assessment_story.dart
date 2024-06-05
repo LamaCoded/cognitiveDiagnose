@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:measureap/presentation/AssessmentPage/Widgets/option_card_widget.dart';
+import 'package:measureap/presentation/AssessmentPage/bloc/assessment_bloc.dart';
 
 class AssessmentStory extends StatefulWidget {
+  final VoidCallback onContinue;
+  final VoidCallback onBack;
+
+  AssessmentStory({super.key, required this.onContinue, required this.onBack});
   @override
   State<AssessmentStory> createState() => _AssessmentStoryState();
 }
@@ -9,6 +15,38 @@ class AssessmentStory extends StatefulWidget {
 class _AssessmentStoryState extends State<AssessmentStory> {
   int maxLine = 2;
   String ShowText = "Show All";
+  List<int> selectedAnswer = [];
+  List<String> choices = [
+    'Jill bought candies.',
+    'Jill has a dog as a pet.',
+    'Jill took a cab.'
+  ];
+
+  void _handleOptionTap(int index) {
+    setState(() {
+      if (selectedAnswer.contains(index)) {
+        selectedAnswer.remove(index);
+      } else {
+        selectedAnswer.add(index);
+      }
+    });
+  }
+
+  void pressButton() {
+    int score;
+    if (selectedAnswer.contains(0) &&
+        selectedAnswer.contains(2) &&
+        selectedAnswer.isNotEmpty) {
+      score = 6;
+    } else if (selectedAnswer.contains(0) || selectedAnswer.contains(2)) {
+      score = 3;
+    } else {
+      score = 0;
+    }
+
+    context.read<AssessmentBloc>().add(correctAnswerEvent(2, score));
+    widget.onContinue();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,28 +86,23 @@ class _AssessmentStoryState extends State<AssessmentStory> {
             child: Text(ShowText),
           ),
           SizedBox(height: 16),
-          OptionCard(
-            text: 'Jill bought candies.',
-            isSelected: true,
-          ),
-          OptionCard(
-            text: 'Jill has a dog as a pet.',
-            isSelected: false,
-          ),
-          OptionCard(
-            text: 'Jill took a cab.',
-            isSelected: true,
-          ),
+          for (int i = 0; i < choices.length; i++)
+            OptionCard(
+              text: choices[i],
+              isSelected: false,
+              index: i,
+              onClicked: _handleOptionTap,
+            ),
           Spacer(),
           Row(
             children: [
               IconButton(
                 icon: Icon(Icons.arrow_back),
-                onPressed: () {},
+                onPressed: widget.onBack,
               ),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: pressButton,
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(

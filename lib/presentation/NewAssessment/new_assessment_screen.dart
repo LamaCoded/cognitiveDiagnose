@@ -1,6 +1,48 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:measureap/presentation/HomePage/bloc/home_bloc.dart';
 
-class NewAssessmentPage extends StatelessWidget {
+class NewAssessmentPage extends StatefulWidget {
+  final Map<String, dynamic>? arguments;
+
+  NewAssessmentPage({this.arguments});
+
+  @override
+  State<NewAssessmentPage> createState() => _NewAssessmentPageState();
+}
+
+class _NewAssessmentPageState extends State<NewAssessmentPage> {
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String? cognitionStatus;
+  String? applicableMeasure;
+  void initState() {
+    super.initState();
+    cognitionStatus = widget.arguments != null
+        ? widget.arguments!['congitionStatus'] as String?
+        : 'Select Cognitive Test';
+    applicableMeasure = widget.arguments != null
+        ? widget.arguments!['applicableMeasure'] as String?
+        : 'Select Applicable Measures';
+  }
+
+  List<String> cognitiveStatus = [
+    'Select Cognitive Test',
+    'Cognition',
+    'Z00.0',
+    'Z01.89',
+    'Z00.89'
+  ];
+
+  List<String> applicableMeasures = [
+    'Select Applicable Measures',
+    'SLUMS',
+    'Physical Examination',
+    'Diagnostic Tests'
+  ];
+
+  final PatientName = 'John Smith';
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -32,16 +74,19 @@ class NewAssessmentPage extends StatelessWidget {
               Text('Cognitive status'),
               SizedBox(height: 8),
               DropdownButtonFormField<String>(
-                value: 'Cognition',
-                items: ['Cognition'].map((String value) {
+                onChanged: (value) {
+                  print(value);
+                  setState(() {
+                    cognitionStatus = value;
+                  });
+                },
+                value: cognitionStatus,
+                items: cognitiveStatus.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
                   );
                 }).toList(),
-                onChanged: (newValue) {
-                  // Handle change
-                },
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                 ),
@@ -50,15 +95,17 @@ class NewAssessmentPage extends StatelessWidget {
               Text('Applicable measures'),
               SizedBox(height: 8),
               DropdownButtonFormField<String>(
-                value: 'SLUMS',
-                items: ['SLUMS'].map((String value) {
+                value: applicableMeasure,
+                items: applicableMeasures.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
                   );
                 }).toList(),
                 onChanged: (newValue) {
-                  // Handle change
+                  setState(() {
+                    applicableMeasure = newValue;
+                  });
                 },
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -68,6 +115,7 @@ class NewAssessmentPage extends StatelessWidget {
               Text('Patient'),
               SizedBox(height: 8),
               TextFormField(
+                initialValue: PatientName,
                 decoration: InputDecoration(
                   hintText: 'Enter patient name or ID',
                   border: OutlineInputBorder(),
@@ -77,7 +125,15 @@ class NewAssessmentPage extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    Map<String, dynamic> formData = {
+                      'congitionStatus': cognitionStatus,
+                      'applicableMeasure': applicableMeasure,
+                      'patientName': PatientName
+                    };
+                    final docRef = firestore.collection('newAssessment').doc();
+                    await docRef.set(formData);
+
                     Navigator.pushNamed(context, '/startAssessment');
                   },
                   style: ElevatedButton.styleFrom(

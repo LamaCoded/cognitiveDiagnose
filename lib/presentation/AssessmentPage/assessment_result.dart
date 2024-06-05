@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:measureap/presentation/AssessmentPage/bloc/assessment_bloc.dart';
 
 class AssessmentResults extends StatelessWidget {
+  AssessmentResults({required this.onBack});
+  final VoidCallback onBack;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,73 +19,83 @@ class AssessmentResults extends StatelessWidget {
               ),
         ),
         SizedBox(height: 20),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            border: Border.all(color: Colors.black.withOpacity(.08)),
-          ),
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              CircularProgressIndicator(
-                value: 0.6,
-                strokeWidth: 10,
-                backgroundColor: Colors.grey[200],
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.teal),
+        BlocBuilder<AssessmentBloc, AssessmentState>(
+          builder: (context, state) {
+            if (state.isLoading) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(color: Colors.black.withOpacity(.08)),
               ),
-              SizedBox(height: 20),
-              Text(
-                '12/20',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  CircularProgressIndicator(
+                    value: 0.6,
+                    strokeWidth: 10,
+                    backgroundColor: Colors.grey[200],
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.teal),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    '${state.marks}/20',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 20),
+                  Divider(
+                    color: Colors.black.withOpacity(.08),
+                  ),
+                  ListTile(
+                    title: Text('Question 1'),
+                    trailing: Text(
+                      'Correct',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ),
+                  ListTile(
+                    title: Text('Question 2'),
+                    trailing: Text(
+                      'Correct',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ),
+                  ListTile(
+                    title: Text('Question 3'),
+                    trailing: Text(
+                      'Incorrect',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                  ListTile(
+                    title: Text('Question 4'),
+                    trailing: Text(
+                      'Correct',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      'Show all',
+                      style: TextStyle(color: Colors.orange),
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 20),
-              Divider(
-                color: Colors.black.withOpacity(.08),
-              ),
-              ListTile(
-                title: Text('Question 1'),
-                trailing: Text(
-                  'Correct',
-                  style: TextStyle(color: Colors.green),
-                ),
-              ),
-              ListTile(
-                title: Text('Question 2'),
-                trailing: Text(
-                  'Correct',
-                  style: TextStyle(color: Colors.green),
-                ),
-              ),
-              ListTile(
-                title: Text('Question 3'),
-                trailing: Text(
-                  'Incorrect',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-              ListTile(
-                title: Text('Question 4'),
-                trailing: Text(
-                  'Correct',
-                  style: TextStyle(color: Colors.green),
-                ),
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                  'Show all',
-                  style: TextStyle(color: Colors.orange),
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         ),
         Spacer(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ElevatedButton(
-              onPressed: () {},
+              onPressed: onBack,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: Colors.black,

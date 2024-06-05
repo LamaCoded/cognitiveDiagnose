@@ -2,16 +2,16 @@ part of 'home_bloc.dart';
 
 @immutable
 class HomeState extends Equatable {
-  // List<Map<String, dynamic>> recentHistoryModelList;
-  // List<Map<String, dynamic>> recentAssessmentModelList;
   List<RecentHistoryModel> recentHistoryModelList;
   List<RecentAssessmentModel> recentAssessmentModelList;
+  List<Map<String, dynamic>> selectedCognition;
   bool isHistoryLoading = true;
   bool isAssesmentLoading = true;
 
   HomeState(
       {this.recentHistoryModelList = const [],
       this.recentAssessmentModelList = const [],
+      this.selectedCognition = const [],
       this.isHistoryLoading = true,
       this.isAssesmentLoading = true});
 
@@ -26,6 +26,7 @@ class HomeState extends Equatable {
   HomeState copyWith({
     List<RecentHistoryModel>? recentHistoryModelList,
     List<RecentAssessmentModel>? recentAssessmentModelList,
+    List<Map<String, dynamic>>? selectedCognition,
     bool? isAssesmentLoading,
     bool? isHistoryLoading,
   }) {
@@ -34,6 +35,7 @@ class HomeState extends Equatable {
           List.from(recentHistoryModelList ?? this.recentHistoryModelList),
       recentAssessmentModelList: List.from(
           recentAssessmentModelList ?? this.recentAssessmentModelList),
+      selectedCognition: List.from(selectedCognition ?? this.selectedCognition),
       isHistoryLoading: isHistoryLoading ?? this.isHistoryLoading,
       isAssesmentLoading: isAssesmentLoading ?? this.isAssesmentLoading,
     );

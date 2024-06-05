@@ -11,6 +11,7 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc(HomeState initialState) : super(initialState) {
     on<HomeInitialEvent>(_onInitialize);
+    on<onSelectCognitionEvent>(_onSelectCognition);
     on<RecentHistoryItemFetchEvent>(_onHistoryFetch
         as EventHandler<RecentHistoryItemFetchEvent, HomeState>);
     on<RecentAssessmentItemFetchEvent>(_onAssessmentFetch
@@ -48,10 +49,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
+  void _onSelectCognition(
+      onSelectCognitionEvent event, Emitter<HomeState> emit) {
+    print(event.payload);
+    emit(state.copyWith(selectedCognition: [event.payload]));
+  }
+
   _onHistoryFetch(
     RecentHistoryItemFetchEvent event,
     Emitter<HomeState> emit,
   ) {}
+
   _onAssessmentFetch(
     RecentAssessmentItemFetchEvent event,
     Emitter<HomeState> emit,

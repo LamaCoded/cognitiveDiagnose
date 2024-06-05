@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AssessmentSentence extends StatelessWidget {
+  final VoidCallback onContinue;
+  final VoidCallback onBack;
+
+  AssessmentSentence(
+      {super.key, required this.onContinue, required this.onBack});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,11 +46,11 @@ class AssessmentSentence extends StatelessWidget {
             children: [
               IconButton(
                 icon: Icon(Icons.arrow_back),
-                onPressed: () {},
+                onPressed: onBack,
               ),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: onContinue,
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(

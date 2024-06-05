@@ -29,7 +29,9 @@ class HomeScreen extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           child: FloatingActionButton(
             backgroundColor: Colors.black,
-            onPressed: () => Navigator.pushNamed(context, '/newAssessment'),
+            onPressed: () {
+              Navigator.pushNamed(context, '/newAssessment');
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

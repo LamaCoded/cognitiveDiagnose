@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 class OptionCard extends StatefulWidget {
   final String text;
   final bool isSelected;
+  final int index;
+  final Function(int) onClicked;
 
   const OptionCard({
     Key? key,
     required this.text,
     required this.isSelected,
+    required this.index,
+    required this.onClicked,
   }) : super(key: key);
 
   @override
@@ -47,6 +51,7 @@ class _OptionCardState extends State<OptionCard> {
   void _toggleSelection() {
     setState(() {
       _isSelected = !_isSelected;
+      widget.onClicked(widget.index);
     });
   }
 }

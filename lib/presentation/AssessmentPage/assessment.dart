@@ -13,6 +13,23 @@ class AssessmentScreen extends StatefulWidget {
 class _AssessmentScreenState extends State<AssessmentScreen> {
   int pageValue = 0;
   final PageController _pageController = PageController(initialPage: 0);
+  void goToNextPage() {
+    if (pageValue < 4) {
+      _pageController.nextPage(
+        duration: Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  void goToPreviousPage() {
+    if (pageValue > 0) {
+      _pageController.previousPage(
+        duration: Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +76,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
               SizedBox(height: 32.0),
               Expanded(
                 child: PageView(
+                  physics: NeverScrollableScrollPhysics(),
                   controller: _pageController,
                   pageSnapping: true,
                   onPageChanged: (index) {
@@ -67,11 +85,22 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                     });
                   },
                   children: [
-                    AssessmentMain(),
-                    AssessmentStory(),
-                    AssessmentSentence(),
-                    AssessmentIdentifyAnimal(),
-                    AssessmentResults()
+                    AssessmentMain(
+                      onContinue: goToNextPage,
+                    ),
+                    AssessmentStory(
+                      onContinue: goToNextPage,
+                      onBack: goToPreviousPage,
+                    ),
+                    AssessmentSentence(
+                      onContinue: goToNextPage,
+                      onBack: goToPreviousPage,
+                    ),
+                    AssessmentIdentifyAnimal(
+                      onContinue: goToNextPage,
+                      onBack: goToPreviousPage,
+                    ),
+                    AssessmentResults(onBack: goToPreviousPage)
                   ],
                 ),
               )

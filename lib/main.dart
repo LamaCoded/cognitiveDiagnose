@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:measureap/presentation/AssessmentPage/assessment.dart';
+import 'package:measureap/presentation/AssessmentPage/bloc/assessment_bloc.dart';
 import 'package:measureap/presentation/DashBoardPage/dashboard_page_screen.dart';
 import 'package:measureap/presentation/HomePage/bloc/home_bloc.dart';
 import 'package:measureap/presentation/HomePage/home_page_screen.dart';
@@ -33,6 +34,10 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) => HomeBloc(HomeState())..add(HomeInitialEvent()),
+          ),
+          BlocProvider(
+            create: (context) => AssessmentBloc(AssessmentState())
+              ..add(AssessmentInitialEvent()),
           ),
         ],
         child: MaterialApp(
@@ -66,7 +71,9 @@ class MyApp extends StatelessWidget {
           routes: {
             '/': (context) => DashBoardScreen(),
             '/Home': (context) => HomeScreen(),
-            '/newAssessment': (context) => NewAssessmentPage(),
+            '/newAssessment': (context) => NewAssessmentPage(
+                arguments: ModalRoute.of(context)?.settings.arguments
+                    as Map<String, dynamic>?),
             '/startAssessment': (context) => AssessmentScreen()
           },
         ));

@@ -1,7 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:measureap/presentation/AssessmentPage/Widgets/animal_switch_listtile.dart';
 
-class AssessmentIdentifyAnimal extends StatelessWidget {
+class AssessmentIdentifyAnimal extends StatefulWidget {
+  final VoidCallback onContinue;
+  final VoidCallback onBack;
+
+  AssessmentIdentifyAnimal(
+      {super.key, required this.onContinue, required this.onBack});
+
+  @override
+  State<AssessmentIdentifyAnimal> createState() =>
+      _AssessmentIdentifyAnimalState();
+}
+
+class _AssessmentIdentifyAnimalState extends State<AssessmentIdentifyAnimal> {
+  List<bool> correctAnswer = [false, false, false];
+
+  void pressButton() {
+    print('...........................');
+    print(correctAnswer);
+    print('...........................');
+
+    int score = 0;
+    int correctCount = correctAnswer.where((answer) => answer).length;
+    switch (correctCount) {
+      case 3:
+        score = 9;
+        break;
+      case 2:
+        score = 6;
+        break;
+      case 1:
+        score = 3;
+        break;
+      default:
+        score = 0;
+    }
+    print('Score: $score');
+
+    // You might use a state management solution here to communicate score
+    // to other parts of your app if needed
+  }
+
+  void updateAnswer(int index, bool value) {
+    setState(() {
+      correctAnswer[index] = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,24 +71,21 @@ class AssessmentIdentifyAnimal extends StatelessWidget {
           AnimalSwitchListTile(
             imageUrl: 'https://prajwollama.com.np/prajwollama.jpg',
             title: 'Chicken',
-            value: false,
-            onChanged: (value) {},
+            onChanged: (value) => updateAnswer(0, value),
           ),
           AnimalSwitchListTile(
             imageUrl: 'https://prajwollama.com.np/prajwollama.jpg',
             title: 'Horse',
-            value: false,
-            onChanged: (value) {},
+            onChanged: (value) => updateAnswer(1, value),
           ),
           AnimalSwitchListTile(
             imageUrl: 'https://prajwollama.com.np/prajwollama.jpg',
             title: 'Dog',
-            value: true,
-            onChanged: (value) {},
+            onChanged: (value) => updateAnswer(2, value),
           ),
           Spacer(),
           Text(
-            '1 correct',
+            '${correctAnswer.where((answer) => answer).length} correct', // Display number of selected animals
             style: TextStyle(
               color: Colors.orange,
               fontWeight: FontWeight.bold,
@@ -52,11 +95,11 @@ class AssessmentIdentifyAnimal extends StatelessWidget {
             children: [
               IconButton(
                 icon: Icon(Icons.arrow_back),
-                onPressed: () {},
+                onPressed: widget.onBack,
               ),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: pressButton,
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
