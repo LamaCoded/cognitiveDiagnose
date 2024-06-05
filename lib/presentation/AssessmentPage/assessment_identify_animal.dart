@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:measureap/presentation/AssessmentPage/Widgets/animal_switch_listtile.dart';
+import 'package:measureap/presentation/AssessmentPage/bloc/assessment_bloc.dart';
 
 class AssessmentIdentifyAnimal extends StatefulWidget {
   final VoidCallback onContinue;
@@ -15,38 +17,6 @@ class AssessmentIdentifyAnimal extends StatefulWidget {
 
 class _AssessmentIdentifyAnimalState extends State<AssessmentIdentifyAnimal> {
   List<bool> correctAnswer = [false, false, false];
-
-  void pressButton() {
-    print('...........................');
-    print(correctAnswer);
-    print('...........................');
-
-    int score = 0;
-    int correctCount = correctAnswer.where((answer) => answer).length;
-    switch (correctCount) {
-      case 3:
-        score = 9;
-        break;
-      case 2:
-        score = 6;
-        break;
-      case 1:
-        score = 3;
-        break;
-      default:
-        score = 0;
-    }
-    print('Score: $score');
-
-    // You might use a state management solution here to communicate score
-    // to other parts of your app if needed
-  }
-
-  void updateAnswer(int index, bool value) {
-    setState(() {
-      correctAnswer[index] = value;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,21 +41,30 @@ class _AssessmentIdentifyAnimalState extends State<AssessmentIdentifyAnimal> {
           AnimalSwitchListTile(
             imageUrl: 'https://prajwollama.com.np/prajwollama.jpg',
             title: 'Chicken',
-            onChanged: (value) => updateAnswer(0, value),
+            onChanged: (value) => {
+              if (value == true)
+                {context.read<AssessmentBloc>().add(correctAnswerEvent(2, 3))}
+            },
           ),
           AnimalSwitchListTile(
             imageUrl: 'https://prajwollama.com.np/prajwollama.jpg',
             title: 'Horse',
-            onChanged: (value) => updateAnswer(1, value),
+            onChanged: (value) => {
+              if (value == true)
+                {context.read<AssessmentBloc>().add(correctAnswerEvent(2, 3))}
+            },
           ),
           AnimalSwitchListTile(
             imageUrl: 'https://prajwollama.com.np/prajwollama.jpg',
             title: 'Dog',
-            onChanged: (value) => updateAnswer(2, value),
+            onChanged: (value) => {
+              if (value == true)
+                {context.read<AssessmentBloc>().add(correctAnswerEvent(2, 3))}
+            },
           ),
           Spacer(),
           Text(
-            '${correctAnswer.where((answer) => answer).length} correct', // Display number of selected animals
+            '${correctAnswer.where((answer) => answer).length} correct',
             style: TextStyle(
               color: Colors.orange,
               fontWeight: FontWeight.bold,
@@ -99,7 +78,7 @@ class _AssessmentIdentifyAnimalState extends State<AssessmentIdentifyAnimal> {
               ),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: pressButton,
+                  onPressed: widget.onBack,
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
