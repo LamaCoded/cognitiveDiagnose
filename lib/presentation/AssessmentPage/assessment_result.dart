@@ -52,7 +52,7 @@ class AssessmentResults extends StatelessWidget {
                           ),
                           Positioned(
                             child: Text(
-                              '${state.marks}/20',
+                              '${state.marks}/18',
                               style: TextStyle(
                                   fontSize: 24, fontWeight: FontWeight.bold),
                             ),
