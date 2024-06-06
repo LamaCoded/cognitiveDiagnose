@@ -18,6 +18,14 @@ class AssessmentIdentifyAnimal extends StatefulWidget {
 class _AssessmentIdentifyAnimalState extends State<AssessmentIdentifyAnimal> {
   List<bool> correctAnswer = [false, false, false];
 
+  void handleSwitchChange(int index, bool value) {
+    setState(() {
+      correctAnswer[index] = value;
+    });
+
+    context.read<AssessmentBloc>().add(correctAnswerEvent(index + 4, 3));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,26 +49,20 @@ class _AssessmentIdentifyAnimalState extends State<AssessmentIdentifyAnimal> {
           AnimalSwitchListTile(
             imageUrl: 'https://prajwollama.com.np/prajwollama.jpg',
             title: 'Chicken',
-            onChanged: (value) => {
-              if (value == true)
-                {context.read<AssessmentBloc>().add(correctAnswerEvent(2, 3))}
-            },
+            isSwitched: correctAnswer[0],
+            onChanged: (value) => handleSwitchChange(0, value),
           ),
           AnimalSwitchListTile(
             imageUrl: 'https://prajwollama.com.np/prajwollama.jpg',
             title: 'Horse',
-            onChanged: (value) => {
-              if (value == true)
-                {context.read<AssessmentBloc>().add(correctAnswerEvent(2, 3))}
-            },
+            isSwitched: correctAnswer[1],
+            onChanged: (value) => handleSwitchChange(1, value),
           ),
           AnimalSwitchListTile(
             imageUrl: 'https://prajwollama.com.np/prajwollama.jpg',
             title: 'Dog',
-            onChanged: (value) => {
-              if (value == true)
-                {context.read<AssessmentBloc>().add(correctAnswerEvent(2, 3))}
-            },
+            isSwitched: correctAnswer[2],
+            onChanged: (value) => handleSwitchChange(2, value),
           ),
           Spacer(),
           Text(
@@ -70,6 +72,9 @@ class _AssessmentIdentifyAnimalState extends State<AssessmentIdentifyAnimal> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             children: [
               IconButton(
@@ -78,7 +83,10 @@ class _AssessmentIdentifyAnimalState extends State<AssessmentIdentifyAnimal> {
               ),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: widget.onBack,
+                  onPressed: () {
+                    context.read<AssessmentBloc>().add(saveDataEvent());
+                    widget.onContinue();
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(

@@ -15,3 +15,5 @@ class correctAnswerEvent extends AssessmentEvent {
   int payload;
   int marksReceived;
 }
+
+class saveDataEvent extends AssessmentEvent {}

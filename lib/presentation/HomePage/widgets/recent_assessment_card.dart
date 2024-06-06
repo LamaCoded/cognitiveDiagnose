@@ -4,10 +4,6 @@ import 'package:measureap/presentation/HomePage/model/recent_assessment_model.da
 Widget buildAssessmentCard(BuildContext context, RecentAssessmentModel model) {
   return GestureDetector(
     onTap: () {
-      // context.read<HomeBloc>().add(onSelectCognitionEvent(payload: {
-      //       'congitionStatus': model.code,
-      //       'applicableMeasure': model.title
-      //     }));
       Map<String, dynamic> data = {
         'congitionStatus': model.code,
         'applicableMeasure': model.title

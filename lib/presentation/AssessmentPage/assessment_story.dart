@@ -33,18 +33,21 @@ class _AssessmentStoryState extends State<AssessmentStory> {
   }
 
   void pressButton() {
-    int score;
+    int score = 3;
     if (selectedAnswer.contains(0) &&
         selectedAnswer.contains(2) &&
         selectedAnswer.isNotEmpty) {
-      score = 6;
-    } else if (selectedAnswer.contains(0) || selectedAnswer.contains(2)) {
       score = 3;
+      context.read<AssessmentBloc>().add(correctAnswerEvent(2, score));
+      context.read<AssessmentBloc>().add(correctAnswerEvent(3, score));
+    } else if (selectedAnswer.contains(0)) {
+      context.read<AssessmentBloc>().add(correctAnswerEvent(2, score));
+    } else if (selectedAnswer.contains(2)) {
+      context.read<AssessmentBloc>().add(correctAnswerEvent(3, score));
     } else {
       score = 0;
     }
 
-    context.read<AssessmentBloc>().add(correctAnswerEvent(2, score));
     widget.onContinue();
   }
 

@@ -1,42 +1,52 @@
 import 'package:flutter/material.dart';
 
-class AnimalSwitchListTile extends StatefulWidget {
+class AnimalSwitchListTile extends StatelessWidget {
   final String imageUrl;
   final String title;
   final ValueChanged<bool> onChanged;
-  bool isSwitched;
+  final bool isSwitched;
+
   AnimalSwitchListTile({
     Key? key,
     required this.imageUrl,
     required this.title,
     required this.onChanged,
-    this.isSwitched = false,
+    required this.isSwitched,
   }) : super(key: key);
 
   @override
-  State<AnimalSwitchListTile> createState() => _AnimalSwitchListTileState();
-}
-
-class _AnimalSwitchListTileState extends State<AnimalSwitchListTile> {
-  @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage(widget.imageUrl),
-      ),
-      title: Text(widget.title),
-      trailing: Switch(
-        value: widget.isSwitched,
-        onChanged: (value) {
-          setState(() {
-            widget.isSwitched = value;
-          });
-          print('===========');
-          print(value);
-          print('===========');
-
-          widget.onChanged;
+      leading: GestureDetector(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) => Dialog(
+              backgroundColor: Colors.transparent,
+              child: ClipOval(
+                child: Container(
+                  width: 300,
+                  height: 300,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: NetworkImage(imageUrl),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
         },
+        child: CircleAvatar(
+          backgroundImage: NetworkImage(imageUrl),
+        ),
+      ),
+      title: Text(title),
+      trailing: Switch(
+        value: isSwitched,
+        onChanged: onChanged,
       ),
     );
   }
